@@ -118,5 +118,10 @@ namespace Lab1
         {
             return $"Station \"{name}\"\n\tLane count: {laneCount}\n\tLanes: {lanes.ToString()}";
         }
+
+        public string GetName()
+        {
+            return name;
+        }
     }
 }
