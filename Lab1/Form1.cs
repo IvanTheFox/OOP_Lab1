@@ -90,5 +90,56 @@ namespace Lab1
 
             UpdateUI();
         }
+
+        private void CreateStationButton_Click(object sender, EventArgs e)
+        {
+            string name = NewStationTextbox.Text.Trim();
+            int laneCount = (int)NewStationsCountNumeric.Value;
+
+            if (laneCount <= 0)
+            {
+                MessageBox.Show(
+                    "Введите корректное количество путей (целое положительное число).",
+                    "Ошибка",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                );
+                return;
+            }
+
+            // Если название не задано
+            if (string.IsNullOrEmpty(name))
+            {
+                name = $"Новая станция {stations.Count + 1}";
+            }
+
+            RailwayStation newStation = new RailwayStation(name, laneCount);
+            stations.Add(newStation);
+
+            // Если это первая станция, она становится текущей
+            if (currentIndex == -1)
+            {
+                currentIndex = 0;
+            }
+
+            NewStationTextbox.Clear();
+            NewStationsCountNumeric.Value = 0;
+            UpdateUI();
+        }
+
+        private void ClearLaneButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void AddTrainButton_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ExitButton_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }
