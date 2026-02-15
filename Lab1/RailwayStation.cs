@@ -121,7 +121,7 @@ namespace Lab1
         }
         public override string ToString()
         {
-            return $"Station \"{name}\"\n\tLane count: {laneCount}\n\tLanes: {lanes.ToString()}";
+            return $"Станция \"{name}\"\n  Путей: {laneCount}\n";
         }
 
         public string GetName()

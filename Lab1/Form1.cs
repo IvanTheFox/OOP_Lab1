@@ -46,8 +46,18 @@ namespace Lab1
             // Общее количество станций
             StationsCountTextbox.Text = stations.Count.ToString();
 
+            LaneTable.Rows.Clear();
+
             if (stations.Count > 0 && currentIndex >= 0 && currentIndex < stations.Count)
+            {
                 CurrentStationTextbox.Text = stations[currentIndex].GetName();
+                for (int i = 0; i < stations[currentIndex].GetLaneCount(); i++)
+                {
+                    int trainId = stations[currentIndex].GetTrainOnLane(i);
+                    LaneTable.Rows.Add(i, (trainId == -1)? "-" : trainId.ToString());
+                }
+            }
+
             else
                 CurrentStationTextbox.Text = "";
 
@@ -56,10 +66,12 @@ namespace Lab1
             foreach (var station in stations)
             {
                 StationsListBox.Items.Add(station.ToString());
+
             }
         }
 
 
+        // Переименование текущей станции
         private void RenameButton_Click(object sender, EventArgs e)
         {
             if (stations.Count == 0 || currentIndex < 0 || currentIndex >= stations.Count)
