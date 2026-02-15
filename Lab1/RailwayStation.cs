@@ -80,9 +80,9 @@ namespace Lab1
         public bool IsLaneEmpty(int laneId)
         {
             CheckLaneId(laneId);
-            return lanes[laneId] != -1;
+            return lanes[laneId] == -1;
         }
-        public int departFromLane(int laneId)
+        public int DepartFromLane(int laneId)
         {
             CheckLaneId(laneId);
             if (IsLaneEmpty(laneId))

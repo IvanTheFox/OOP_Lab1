@@ -45,7 +45,6 @@
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.NewStationsCountNumeric = new System.Windows.Forms.NumericUpDown();
-            this.LanesListBox = new System.Windows.Forms.ListBox();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.LaneIDTextbox1 = new System.Windows.Forms.TextBox();
