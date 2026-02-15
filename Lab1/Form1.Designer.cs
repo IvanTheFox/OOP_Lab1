@@ -56,7 +56,11 @@
             this.LaneIDTextbox2 = new System.Windows.Forms.TextBox();
             this.AddTrainButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.LaneTable = new System.Windows.Forms.DataGridView();
+            this.LaneId = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TrainId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.NewStationsCountNumeric)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.LaneTable)).BeginInit();
             this.SuspendLayout();
             // 
             // label1

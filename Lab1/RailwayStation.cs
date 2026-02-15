@@ -102,6 +102,11 @@ namespace Lab1
 
             lanes[laneId] = trainId;
         }
+
+        public int GetTrainOnLane(int laneId)
+        {
+            return lanes[laneId];
+        }
         public int GetLaneCount()
         {
             return laneCount;
