@@ -10,7 +10,7 @@ namespace Lab1
     {
         static int stationCount = 0;
         const int defaultLaneCount = 4;
-        const string defaultName = "Unnamed station";
+        const string defaultName = "Станция без названия";
         string name;
         int laneCount;
         int[] lanes;
@@ -48,10 +48,10 @@ namespace Lab1
         public class EmptyLaneException : Exception
         {
             public EmptyLaneException()
-                : base("The reffered lane is empty")
+                : base("Этот путь уже пуст")
             { }
             public EmptyLaneException(int laneId)
-                : base($"Lane <{laneId}> is empty")
+                : base($"Путь <{laneId}> уже пуст")
             { }
             public EmptyLaneException(string msg)
                 : base(msg)
@@ -60,13 +60,13 @@ namespace Lab1
         public class OccupiedLaneException : Exception
         {
             public OccupiedLaneException()
-                : base("The reffered lane is occupied")
+                : base("Этот путь занят")
             { }
             public OccupiedLaneException(int laneId)
-                : base($"Lane <{laneId}> is occupied")
+                : base($"Путь <{laneId}> занят")
             { }
             public OccupiedLaneException(int laneId, int trainId)
-                : base($"Lane <{laneId}> is occupied by train <{trainId}>")
+                : base($"Путь <{laneId}> занят поездом <{trainId}>")
             { }
             public OccupiedLaneException(string msg)
                 : base(msg)
@@ -75,7 +75,7 @@ namespace Lab1
         private void CheckLaneId(int laneId)
         {
             if (laneId < 0 || laneId >= laneCount)
-                throw new ArgumentException($"Provided lane id is outside the [0, {laneCount - 1}] range");
+                throw new ArgumentException($"Предоставленный id пути за пределами допустимых границ [0, {laneCount - 1}]");
         }
         public bool IsLaneEmpty(int laneId)
         {
@@ -96,7 +96,7 @@ namespace Lab1
         {
             CheckLaneId(laneId);
             if (trainId < 0)
-                throw new ArgumentException("Train id has to be 0 or larger");
+                throw new ArgumentException("Id поезда должно быть 0 или больше");
             if (!IsLaneEmpty(laneId))
                 throw new OccupiedLaneException(laneId, lanes[laneId]);
 
