@@ -65,7 +65,6 @@
             this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.ExceptionButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.NewStationsCountNumeric)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.LaneTable)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -438,23 +437,11 @@
             this.groupBox6.TabIndex = 36;
             this.groupBox6.TabStop = false;
             // 
-            // ExceptionButton
-            // 
-            this.ExceptionButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.ExceptionButton.Image = global::Lab1.Properties.Resources.череп_50x50px;
-            this.ExceptionButton.Location = new System.Drawing.Point(827, 595);
-            this.ExceptionButton.Name = "ExceptionButton";
-            this.ExceptionButton.Size = new System.Drawing.Size(50, 50);
-            this.ExceptionButton.TabIndex = 37;
-            this.ExceptionButton.UseVisualStyleBackColor = true;
-            this.ExceptionButton.Click += new System.EventHandler(this.ExceptionButton_Click);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 24F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1133, 671);
-            this.Controls.Add(this.ExceptionButton);
             this.Controls.Add(this.groupBox6);
             this.Controls.Add(this.groupBox5);
             this.Controls.Add(this.groupBox4);
@@ -464,11 +451,10 @@
             this.Controls.Add(this.ExitButton);
             this.Font = new System.Drawing.Font("Arial Narrow", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Вокзал";
             this.Load += new System.EventHandler(this.Form1_Load);
-            this.Resize += new System.EventHandler(this.Form1_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.NewStationsCountNumeric)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.LaneTable)).EndInit();
             this.groupBox1.ResumeLayout(false);
@@ -523,7 +509,6 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.GroupBox groupBox5;
         private System.Windows.Forms.GroupBox groupBox6;
-        private System.Windows.Forms.Button ExceptionButton;
     }
 }
 

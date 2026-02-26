@@ -3,22 +3,21 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using static Lab1.RailwayStation;
 
 namespace Lab1
 {
     public partial class Form1 : Form
     {
-        private List<RailwayStation> stations;
-        private int currentIndex;
+        List<RailwayStation> _stations;
+        int _currentIndex;
 
         public Form1()
         {
             InitializeComponent();
 
-            stations = new List<RailwayStation>();
-            currentIndex = -1;
+            _stations = new List<RailwayStation>();
+            _currentIndex = -1;
 
             // Текстовые поля только для чтения
             StationsCountTextbox.ReadOnly = true;
@@ -31,13 +30,13 @@ namespace Lab1
         private void Form1_Load(object sender, EventArgs e)
         {
             // Примеры станций
-            stations.Add(new RailwayStation("Станция 1", 5));
-            stations.Add(new RailwayStation("Станция 2", 3));
-            stations.Add(new RailwayStation("Станция 3", 4));
-            stations.Add(new RailwayStation("Станция 4", 2));
+            _stations.Add(new RailwayStation("Станция 1", 5));
+            _stations.Add(new RailwayStation("Станция 2", 3));
+            _stations.Add(new RailwayStation("Станция 3", 4));
+            _stations.Add(new RailwayStation("Станция 4", 2));
 
-            if (stations.Count > 0)
-                currentIndex = 0;
+            if (_stations.Count > 0)
+                _currentIndex = 0;
 
             UpdateUI();
         }
@@ -46,16 +45,16 @@ namespace Lab1
         private void UpdateUI()
         {
             // Общее количество станций
-            StationsCountTextbox.Text = stations.Count.ToString();
+            StationsCountTextbox.Text = _stations.Count.ToString();
 
             LaneTable.Rows.Clear();
 
-            if (stations.Count > 0 && currentIndex >= 0 && currentIndex < stations.Count)
+            if (_stations.Count > 0 && _currentIndex >= 0 && _currentIndex < _stations.Count)
             {
-                CurrentStationTextbox.Text = stations[currentIndex].GetName();
-                for (int i = 0; i < stations[currentIndex].GetLaneCount(); i++)
+                CurrentStationTextbox.Text = _stations[_currentIndex].GetName();
+                for (int i = 0; i < _stations[_currentIndex].GetLaneCount(); i++)
                 {
-                    int trainId = stations[currentIndex].GetTrainOnLane(i);
+                    int trainId = _stations[_currentIndex].GetTrainOnLane(i);
                     LaneTable.Rows.Add(i, (trainId == -1)? "-" : trainId.ToString());
                 }
             }
@@ -65,24 +64,23 @@ namespace Lab1
 
             // Список всех станций
             StationsListBox.Items.Clear();
-            foreach (var station in stations)
+            foreach (var station in _stations)
             {
                 StationsListBox.Items.Add(station.ToString());
 
             }
         }
 
-
         // Переименование текущей станции
         private void RenameButton_Click(object sender, EventArgs e)
         {
-            if (stations.Count == 0 || currentIndex < 0 || currentIndex >= stations.Count)
+            if (_stations.Count == 0 || _currentIndex < 0 || _currentIndex >= _stations.Count)
                 return;
 
             string newName = RenameTextBox.Text.Trim();
             if (!string.IsNullOrEmpty(newName))
             {
-                stations[currentIndex].Rename(newName);
+                _stations[_currentIndex].Rename(newName);
                 RenameTextBox.Clear();
                 UpdateUI();
             }
@@ -91,11 +89,11 @@ namespace Lab1
         // Предыдущая станция
         private void PrevButton_Click(object sender, EventArgs e)
         {
-            if (stations.Count == 0) return;
+            if (_stations.Count == 0) return;
 
-            currentIndex--;
-            if (currentIndex < 0)
-                currentIndex = stations.Count - 1;
+            _currentIndex--;
+            if (_currentIndex < 0)
+                _currentIndex = _stations.Count - 1;
 
             UpdateUI();
         }
@@ -103,11 +101,11 @@ namespace Lab1
         // Следующая станция
         private void NextButton_Click(object sender, EventArgs e)
         {
-            if (stations.Count == 0) return;
+            if (_stations.Count == 0) return;
 
-            currentIndex++;
-            if (currentIndex >= stations.Count)
-                currentIndex = 0;
+            _currentIndex++;
+            if (_currentIndex >= _stations.Count)
+                _currentIndex = 0;
 
             UpdateUI();
         }
@@ -127,16 +125,16 @@ namespace Lab1
             // Если название не задано
             if (string.IsNullOrEmpty(name))
             {
-                name = $"Новая станция {stations.Count + 1}";
+                name = $"Новая станция {_stations.Count + 1}";
             }
 
             RailwayStation newStation = new RailwayStation(name, laneCount);
-            stations.Add(newStation);
+            _stations.Add(newStation);
 
             // Если это первая станция, она становится текущей
-            if (currentIndex == -1)
+            if (_currentIndex == -1)
             {
-                currentIndex = 0;
+                _currentIndex = 0;
             }
 
             NewStationTextbox.Clear();
@@ -149,14 +147,14 @@ namespace Lab1
         private void ClearLaneButton_Click(object sender, EventArgs e)
         {
             // Если станция не выбрана
-            if (stations.Count == 0 || currentIndex < 0 || currentIndex >= stations.Count)
+            if (_stations.Count == 0 || _currentIndex < 0 || _currentIndex >= _stations.Count)
             {
                 MessageBox(IntPtr.Zero, "Нет выбранной станции", "Ошибка: станция не выбрана", 16);
                 return;
             }
             try
             {
-                stations[currentIndex].DepartFromLane(int.Parse(LaneIDTextbox1.Text));
+                _stations[_currentIndex].DepartFromLane(int.Parse(LaneIDTextbox1.Text));
             }
             catch (FormatException ex)
             {
@@ -166,7 +164,7 @@ namespace Lab1
             {
                 MessageBox(IntPtr.Zero, ex.Message, "Ошибка: Пустой путь", 16);
             }
-            catch (ArgumentException ex)
+            catch (InvalidLaneIdException ex)
             {
                 MessageBox(IntPtr.Zero, ex.Message, "Ошибка: Несущесвующий путь", 16);
             }
@@ -177,14 +175,14 @@ namespace Lab1
         private void AddTrainButton_Click(object sender, EventArgs e)
         {
             // Если станция не выбрана
-            if (stations.Count == 0 || currentIndex < 0 || currentIndex >= stations.Count)
+            if (_stations.Count == 0 || _currentIndex < 0 || _currentIndex >= _stations.Count)
             {
                 MessageBox(IntPtr.Zero, "Нет выбранной станции", "Ошибка: станция не выбрана", 16);
                 return;
             }
             try
             {
-                stations[currentIndex].ArriveAtLane(int.Parse(LaneIDTextbox2.Text), int.Parse(TrainIDTextbox.Text));
+                _stations[_currentIndex].ArriveAtLane(int.Parse(LaneIDTextbox2.Text), int.Parse(TrainIDTextbox.Text));
             }
             catch (FormatException ex)
             {
@@ -194,7 +192,7 @@ namespace Lab1
             {
                 MessageBox(IntPtr.Zero, ex.Message, "Ошибка: Путь занят", 16);
             }
-            catch (ArgumentException ex)
+            catch (InvalidLaneIdException ex)
             {
                 MessageBox(IntPtr.Zero, ex.Message, "Ошибка: Несущесвующий путь", 16);
             }
@@ -208,17 +206,5 @@ namespace Lab1
 
         [DllImport("user32.dll",CharSet = CharSet.Auto)]
         private static extern IntPtr MessageBox(IntPtr hWnd, string msg, string caption, uint type);
-
-        private void Form1_Resize(object sender, EventArgs e)
-        {
-
-        }
-
-        private void ExceptionButton_Click(object sender, EventArgs e)
-        {
-            int a = 10;
-            int b = 0;
-            int result = a / b;
-        }
     }
 }

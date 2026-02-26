@@ -8,79 +8,119 @@ namespace Lab1
 {
     internal class RailwayStation
     {
-        static int stationCount = 0;
-        const int defaultLaneCount = 4;
-        const string defaultName = "Станция без названия";
-        string name;
-        int laneCount;
-        int[] lanes;
+        static int s_stationCount = 0;
+        const int DEFAULT_LANE_COUNT = 4;
+        const string DEFAULT_NAME = "Станция без названия";
+        string _name;
+        int _laneCount;
+        int[] _lanes;
         public RailwayStation()
-            : this(defaultName, defaultLaneCount)
+            : this(DEFAULT_NAME, DEFAULT_LANE_COUNT)
         { }
         public RailwayStation(int _laneCount)
-            : this(defaultName, _laneCount)
+            : this(DEFAULT_NAME, _laneCount)
         { }
         public RailwayStation(string _name)
-            : this(_name, defaultLaneCount)
+            : this(_name, DEFAULT_LANE_COUNT)
         { }
         public RailwayStation(string _name, int _laneCount)
         {
-            stationCount++;
-            name = _name;
-            laneCount = _laneCount;
+            s_stationCount++;
+            this._name = _name;
+            this._laneCount = _laneCount;
 
-            lanes = new int[laneCount];
-            for (int i = 0; i < laneCount; i++)
-                lanes[i] = -1;
+            _lanes = new int[this._laneCount];
+            for (int i = 0; i < this._laneCount; i++)
+                _lanes[i] = -1;
 
         }
         public RailwayStation(string _name, int[] _lanes)
         {
-            stationCount++;
-            name = _name;
-            lanes = _lanes;
-            laneCount = lanes.Length;
+            s_stationCount++;
+            this._name = _name;
+            this._lanes = _lanes;
+            _laneCount = this._lanes.Length;
         }
         ~RailwayStation()
         {
-            stationCount--;
+            s_stationCount--;
         }
-        public class EmptyLaneException : Exception
+        public class EmptyLaneException : DivideByZeroException
         {
+            int _laneId;
             public EmptyLaneException()
                 : base("Этот путь уже пуст")
-            { }
+            {
+                this._laneId = -1;
+            }
             public EmptyLaneException(int laneId)
                 : base($"Путь <{laneId}> уже пуст")
-            { }
+            {
+                this._laneId = laneId;
+            }
             public EmptyLaneException(string msg)
                 : base(msg)
-            { }
+            {
+                this._laneId = -1;
+            }
         }
-        public class OccupiedLaneException : Exception
+        public class OccupiedLaneException : DivideByZeroException
         {
+            int _laneId;
+            int _trainId;
             public OccupiedLaneException()
                 : base("Этот путь занят")
-            { }
+            {
+                _laneId = -1;
+                _trainId = -1;
+            }
             public OccupiedLaneException(int laneId)
                 : base($"Путь <{laneId}> занят")
-            { }
+            {
+                this._laneId = laneId;
+                this._trainId = -1;
+            }
             public OccupiedLaneException(int laneId, int trainId)
                 : base($"Путь <{laneId}> занят поездом <{trainId}>")
-            { }
+            {
+                this._laneId = laneId;
+                this._trainId = trainId;
+            }
             public OccupiedLaneException(string msg)
                 : base(msg)
+            {
+                this._laneId = -1;
+                this._trainId = -1;
+            }
+        }
+        public class InvalidLaneIdException : DivideByZeroException
+        {
+            public InvalidLaneIdException()
+            : base($"Предоставленный id пути за пределами допустимых границ")
+            { }
+        }
+        public class InvalidTrainIdException : DivideByZeroException
+        {
+            int _trainId;
+            public InvalidTrainIdException(int trainId)
+                : base($"Идентификатор поезда <{trainId}> некорректный")
+            { }
+        }
+        public class EmptyNameException : DivideByZeroException
+        {
+            public EmptyNameException()
+                : base($"Станцию нельзя назвать пустым именем")
             { }
         }
         private void CheckLaneId(int laneId)
         {
-            if (laneId < 0 || laneId >= laneCount)
-                throw new ArgumentException($"Предоставленный id пути за пределами допустимых границ [0, {laneCount - 1}]");
+            if (laneId < 0 || laneId >= _laneCount)
+                throw new InvalidLaneIdException();
         }
         public bool IsLaneEmpty(int laneId)
         {
             CheckLaneId(laneId);
-            return lanes[laneId] == -1;
+            return _lanes[laneId] == -1;
         }
         public int DepartFromLane(int laneId)
         {
@@ -88,45 +128,50 @@ namespace Lab1
             if (IsLaneEmpty(laneId))
                 throw new EmptyLaneException(laneId);
 
-            int trainId = lanes[laneId];
-            lanes[laneId] = -1;
+            int trainId = _lanes[laneId];
+            _lanes[laneId] = -1;
             return trainId;
         }
         public void ArriveAtLane(int laneId, int trainId)
         {
             CheckLaneId(laneId);
             if (trainId < 0)
-                throw new ArgumentException("Id поезда должно быть 0 или больше");
+                throw new InvalidTrainIdException(trainId);
             if (!IsLaneEmpty(laneId))
-                throw new OccupiedLaneException(laneId, lanes[laneId]);
+                throw new OccupiedLaneException(laneId, _lanes[laneId]);
 
-            lanes[laneId] = trainId;
+            _lanes[laneId] = trainId;
         }
 
         public int GetTrainOnLane(int laneId)
         {
-            return lanes[laneId];
+            CheckLaneId(laneId);
+            if (IsLaneEmpty(laneId))
+                throw new EmptyLaneException(laneId);
+            return _lanes[laneId];
         }
         public int GetLaneCount()
         {
-            return laneCount;
+            return _laneCount;
         }
         public string GetLaneCountBase16()
         {
-            return laneCount.ToString("x");
+            return _laneCount.ToString("x");
         }
         public void Rename(string newName)
         {
-            name = newName;
+            if (newName == "")
+                throw new EmptyNameException();
+            _name = newName;
         }
         public override string ToString()
         {
-            return $"Станция \"{name}\"\n  Путей: {laneCount}\n";
+            return $"Станция \"{_name}\"\n  Путей: {_laneCount}\n";
         }
 
         public string GetName()
         {
-            return name;
+            return _name;
         }
     }
 }
